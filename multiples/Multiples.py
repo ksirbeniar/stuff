@@ -28,12 +28,12 @@ class Multiples():
         Returns:
             list: Input values.
         """
-        incoming_list_of_strings = []
+        incoming_list_of_lists = []
         with open(self.args.input_file, "r", encoding="utf-8") as incoming:
             for line in incoming:
                 if line != "\n":
-                    incoming_list_of_strings.append(line.strip().split())
-        return incoming_list_of_strings
+                    incoming_list_of_lists.append(line.strip().split())
+        return incoming_list_of_lists
 
     def multiply(self, incoming_values:list):
         """
@@ -58,8 +58,26 @@ class Multiples():
                 multiplier += 1
                 if result1 > int(alist[2]) and result2 > int(alist[2]):
                     break
-            outgoing_dict.update({alist[2]:temp_list})
+
+            outgoing_dict.update({alist[2]:self.remove_duplicates_and_sort_results(temp_list)})
+
         return outgoing_dict
+
+    def remove_duplicates_and_sort_results(self, results:list):
+        """Making sure duplicate values are not in results
+          and results are also sorted.
+
+        Args:
+            results (list): Unsorted results.
+        Returns: 
+            list: Sorted and single value results.
+        """
+        inorder = []
+        for item in results:
+            if item not in inorder:
+                inorder.append(item)
+
+        return sorted(inorder)
 
     def format_output(self, outgoing:dict):
         """
@@ -81,7 +99,7 @@ class Multiples():
 
     def write_output_file(self, content:str):
         """
-        Write results in outputfile and on screen.
+        Write results in outputfile.
 
         Inputs:
             str: Ready to print text.
